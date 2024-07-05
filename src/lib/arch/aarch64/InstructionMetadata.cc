@@ -2391,8 +2391,16 @@ void InstructionMetadata::revertAliasing() {
         // ror xd, xn, xm; alias for : rorv xd, xn, xm
         // Blank entry was for a legitimate alias, however operands were
         // identical so nothing to alter between the instructions.
+   
         return;
       }
+      if (opcode == Opcode::AArch64_EXTRWrri || 
+          opcode == Opcode::AArch64_EXTRXrri) {
+          operandCount = 4;
+          operands[3] = operands[2];
+          operands[2] = operands[1];
+          return;
+      } 
       return aliasNYI();
     case ARM64_INS_SBFIZ:
       if (opcode == Opcode::AArch64_SBFMWri ||
