@@ -2387,6 +2387,10 @@ void Instruction::execute() {
         // TODO: Observe hints
         break;
       }
+      case Opcode::AArch64_HLT: {
+        // TODO: Raise exception
+        break;
+      }
       case Opcode::AArch64_INCB_XPiI: {  // incb xdn{, pattern{, #imm}}
         results_[0] = sveInc_gprImm<int8_t>(sourceValues_, metadata_, VL_bits);
         break;
@@ -3519,6 +3523,19 @@ void Instruction::execute() {
         results_[0] = static_cast<int64_t>(memoryData_[0].get<int8_t>());
         break;
       }
+       case Opcode::AArch64_LDRSBWpost: {  // ldrsb wt, [xn], #imm
+        // LOAD
+        results_[0] =
+            RegisterValue(static_cast<int32_t>(memoryData_[0].get<int8_t>()))
+                .zeroExtend(4, 8);
+        break;
+      }
+      case Opcode::AArch64_LDRSBXpost: {  // ldrsb xt, [xn], #imm
+        // LOAD
+        results_[0] = static_cast<int64_t>(memoryData_[0].get<int8_t>());
+        break;
+      }
+    
       case Opcode::AArch64_LDRSHWroW: {  // ldrsh wt, [xn, wm{, extend
                                          // {#amount}}]
         // LOAD
