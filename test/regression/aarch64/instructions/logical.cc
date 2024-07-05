@@ -509,6 +509,35 @@ TEST_P(InstLogical, rorv) {
             0b0000000000000000000000000000000000000000000000000000000001101100);
 }
 
+TEST_P(InstLogical, ror_immediate) {
+  // 32-bit
+  RUN_AARCH64(R"(
+    mov w0, #13    
+    mov w1, #27    
+
+    ror w2, w0, #4 
+    ror w3, w1, #5 
+  )");
+  EXPECT_EQ(getGeneralRegister<uint32_t>(2),
+            0b11010000000000000000000000000000);
+  EXPECT_EQ(getGeneralRegister<uint32_t>(3),
+            0b11011000000000000000000000000000);
+
+  // 64-bit
+  RUN_AARCH64(R"(
+    mov x0, #13    
+    mov x1, #27    
+
+    ror x2, x0, #4 
+    ror x3, x1, #4 
+  )");
+  EXPECT_EQ(getGeneralRegister<uint64_t>(2),
+            0b1101000000000000000000000000000000000000000000000000000000000000);
+  EXPECT_EQ(getGeneralRegister<uint64_t>(3),
+            0b1011000000000000000000000000000000000000000000000000000000000001);
+}
+
+
 INSTANTIATE_TEST_SUITE_P(AArch64, InstLogical,
                          ::testing::Values(std::make_tuple(EMULATION, "{}")),
                          paramToString);
