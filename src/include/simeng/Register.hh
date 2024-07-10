@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-
+#include <cstdint>
 namespace simeng {
 
 /** A generic register identifier. */
